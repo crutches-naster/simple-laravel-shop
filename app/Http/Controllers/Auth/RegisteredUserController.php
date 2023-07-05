@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\RoleNames;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
@@ -42,6 +43,8 @@ class RegisteredUserController extends Controller
     {
         $user = $this->userRegistrationService
             ->createNewUserFromRequest($request);
+
+        $user->assignRole( RoleNames::CUSTOMER->value );
 
         event(new Registered($user));
 
