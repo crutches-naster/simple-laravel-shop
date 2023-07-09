@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +24,12 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::name('admin.')->prefix('admin')->middleware(['auth', 'role:admin|moderator'])->group(function() {
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::resource('products', ProductsController::class)->except(['show']);
+    Route::resource('categories', CategoriesController::class)->except(['show']);
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
