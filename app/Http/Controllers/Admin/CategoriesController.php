@@ -2,66 +2,85 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Categories\CreateCategoryRequest;
+use App\Http\Requests\Categories\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Services\Categories\CategoriesService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
-class CategoriesController
+class CategoriesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private CategoriesService $categoriesService;
+
+    public function __construct(CategoriesService $cService)
+    {
+        $this->categoriesService = $cService;
+    }
+
     public function index()
     {
-        $categories = Category::paginate(2);
+        $categories = $this->categoriesService->getPaginatedCategories();
 
-        return view('admin/categories/index', compact('categories'));
+        return view(
+            view: 'admin/categories/index',
+            data:  compact('categories')
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        //
+        $categories = $this->categoriesService->getAllCategories();
+
+        return view(
+            view: 'admin/categories/create',
+            data:  compact('categories')
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(CreateCategoryRequest $request)
     {
-        //
+        $this->categoriesService->createNewCategory(
+            validated_data: $request->validated()
+        );
+
+        return redirect()->route(
+            route: 'admin.categories.index'
+        );
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Category $category)
     {
-        //
+        $categories = Category::where('id', '!=', $category->id)->get();
+
+        return view(
+            view: 'admin/categories/edit',
+            data: compact('category', 'categories')
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(UpdateCategoryRequest $request, Category $category )
     {
-        //
+        $this->categoriesService->updateCategory($category->id, $request->validated());
+
+        return redirect()->route(
+            route: 'admin.categories.edit',
+            parameters: $category
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Category $category)
     {
-        //
-    }
+        $this->middleware('permission:' . config('permission.access.categories.delete'));
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $this->categoriesService->destroy($category);
+
+        return redirect()->route(
+            route: 'admin.categories.index'
+        );
     }
 }
