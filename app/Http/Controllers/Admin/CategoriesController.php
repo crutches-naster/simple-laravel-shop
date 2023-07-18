@@ -26,51 +26,35 @@ class CategoriesController extends Controller
     {
         $categories = $this->categoriesService->getPaginatedCategories();
 
-        return view(
-            view: 'admin/categories/index',
-            data:  compact('categories')
-        );
+        return view('admin/categories/index', compact('categories'));
     }
 
     public function create(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $categories = $this->categoriesService->getAllCategories();
 
-        return view(
-            view: 'admin/categories/create',
-            data:  compact('categories')
-        );
+        return view('admin/categories/create', compact('categories'));
     }
 
     public function store(CreateCategoryRequest $request)
     {
-        $this->categoriesService->createNewCategory(
-            validated_data: $request->validated()
-        );
+        $this->categoriesService->createNewCategory($request->validated());
 
-        return redirect()->route(
-            route: 'admin.categories.index'
-        );
+        return redirect()->route('admin.categories.index');
     }
 
     public function edit(Category $category)
     {
         $categories = Category::where('id', '!=', $category->id)->get();
 
-        return view(
-            view: 'admin/categories/edit',
-            data: compact('category', 'categories')
-        );
+        return view('admin/categories/edit', compact('category', 'categories'));
     }
 
     public function update(UpdateCategoryRequest $request, Category $category )
     {
         $this->categoriesService->updateCategory($category->id, $request->validated());
 
-        return redirect()->route(
-            route: 'admin.categories.edit',
-            parameters: $category
-        );
+        return redirect()->route('admin.categories.edit', $category);
     }
 
     public function destroy(Category $category)
@@ -79,8 +63,6 @@ class CategoriesController extends Controller
 
         $this->categoriesService->destroy($category);
 
-        return redirect()->route(
-            route: 'admin.categories.index'
-        );
+        return redirect()->route('admin.categories.index');
     }
 }

@@ -10,8 +10,7 @@ class UpdateCategoryRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth()
-            ->user()
+        return auth()->user()
             ->can(
                 config('permission.access.categories.publish')
             );

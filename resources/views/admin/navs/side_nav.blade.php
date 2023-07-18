@@ -31,7 +31,7 @@
 
             <x-side-nav-link link="{{ route('admin.products.index') }}" icon="fa-list" name="All Products" />
 
-            <x-side-nav-link link="{{ route('admin.products.create') }}" icon="fa-plus" name="Add Products" />
+            <x-side-nav-link link="{{ route('admin.products.create') }}" icon="fa-plus" name="Add Product" />
 
             <li class="w-full mt-4">
                 <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase opacity-60">Account pages</h6>
