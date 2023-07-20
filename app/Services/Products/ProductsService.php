@@ -4,26 +4,29 @@ namespace App\Services\Products;
 
 use App\Http\Requests\Products\UpdateProductRequest;
 use App\Models\Product;
+use App\Repositories\RepoImages;
 use App\Repositories\RepoProducts;
 use Illuminate\Support\Str;
 
 class ProductsService
 {
-    private RepoProducts $repo;
+    private RepoProducts $repoProducts;
+    private RepoImages $repoImages;
 
     public function __construct()
     {
-        $this->repo = new RepoProducts();
+        $this->repoProducts = new RepoProducts();
+        $this->repoImages = new RepoImages();
     }
 
     public function getAllProducts()
     {
-        return $this->repo->getAll();
+        return $this->repoProducts->getAll();
     }
 
     public function getAllProductsWithCategories($count = 5, $order_by_column = 'id')
     {
-        return $this->repo->getPaginatedWithCategories(
+        return $this->repoProducts->getPaginatedWithCategories(
             count: $count,
             order_by_column: $order_by_column
         );
@@ -33,15 +36,34 @@ class ProductsService
     {
         $prepared_data = $this->formatRequestData($validated_data);
 
-        return $this->repo->create($prepared_data);
+        $product = $this->repoProducts->create($prepared_data);
 
+        if(!empty($prepared_data['attributes']['images'])) {
+
+            $this->repoImages->attach(
+                $product, 'images', $prepared_data['attributes']['images'],
+                $prepared_data['attributes']['slug']
+            );
+        }
+
+        return $product;
     }
 
     public function updateProduct(Product $product, $validated_data)
     {
         $prepared_data = $this->formatRequestData($validated_data);
 
-        return $this->repo->update($product, $prepared_data);
+        $product = $this->repoProducts->update($product, $prepared_data);
+
+        if(!empty($prepared_data['attributes']['images'])) {
+
+            $this->repoImages->attach(
+                $product, 'images', $prepared_data['attributes']['images'],
+                $prepared_data['attributes']['slug']
+            );
+        }
+
+        return $product;
     }
 
     public function destroyProduct(Product $product)
@@ -57,7 +79,6 @@ class ProductsService
                 collect($validated_data)->except(['categories'])->toArray(),
                 [
                     'slug' => Str::of($validated_data['title'])->slug('-'),
-                    'thumbnail_url' => 'https://via.placeholder.com/640x480.png/004466?text=voluptatum'
                 ]),
             'categories' => $validated_data['categories'] ?? []
         ];

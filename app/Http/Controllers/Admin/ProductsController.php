@@ -34,6 +34,8 @@ class ProductsController extends Controller
 
     public function store(CreateProductRequest $request)
     {
+        //dd($request);
+
         return $this->productsService->createNewProduct( $request->validated() )
             ? redirect()->route('admin.products.index')
             : redirect()->back()->withInput();

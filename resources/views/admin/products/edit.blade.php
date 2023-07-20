@@ -91,46 +91,46 @@
                                         <x-input-error :messages="$errors->get('quantity')" class="mt-2" />
                                     </div>
 
-{{--                                    <div class="mb-4">--}}
-{{--                                        <img src="{{ $product->thumbnailUrl }}" id="thumbnail-preview" style="display: block">--}}
-{{--                                    </div>--}}
+                                    <div class="mb-4">
+                                        <img src="{{ $product->thumbnailUrl }}" id="thumbnail-preview" style="display: block; width: 200px">
+                                    </div>
 
-{{--                                    <div class="mb-4">--}}
-{{--                                        <label class="block text-gray-700 text-sm font-bold mb-2"--}}
-{{--                                               for="thumbnail">Thumbnail</label>--}}
-{{--                                        <input--}}
-{{--                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"--}}
-{{--                                            type="file" id="thumbnail" name="thumbnail">--}}
-{{--                                        <x-input-error :messages="$errors->get('thumbnail')" class="mt-2" />--}}
-{{--                                    </div>--}}
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2"
+                                               for="thumbnail">Thumbnail</label>
+                                        <input
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                            type="file" id="thumbnail" name="thumbnail">
+                                        <x-input-error :messages="$errors->get('thumbnail')" class="mt-2" />
+                                    </div>
 
-{{--                                    @if(!empty($product->images))--}}
-{{--                                        <div class="mb-4 images-wrapper">--}}
-{{--                                            @foreach($product->images as $image)--}}
-{{--                                                @if(Storage::has($image->path))--}}
-{{--                                                    <div class="mb-4" style="position: relative">--}}
-{{--                                                        <img src="{{ $image->url }}" class="card-img-top" style="width: 100%; margin: 0 auto; display: block;">--}}
-{{--                                                        <x-button href="#"--}}
-{{--                                                                  color-type="danger"--}}
-{{--                                                                  class="py-1 px-2 remove-image"--}}
-{{--                                                                  style="position: absolute; top: 0; right: 0"--}}
+                                    @if(!empty($product->images))
+                                        <div class="mb-4 images-wrapper">
+                                            @foreach($product->images as $image)
+                                                @if(Storage::has($image->path))
+                                                    <div class="mb-4" style="position: relative">
+                                                        <img src="{{ $image->url }}" class="card-img-top" style="width: 100%; margin: 0 auto; display: block;">
+                                                        <x-button href="#"
+                                                                  color-type="danger"
+                                                                  class="py-1 px-2 remove-image"
+                                                                  style="position: absolute; top: 0; right: 0"
 {{--                                                                  data-route="{{ route('ajax.images.delete', $image) }}"--}}
-{{--                                                        >--}}
-{{--                                                            <i class="fa fa-trash" aria-hidden="true"></i>--}}
-{{--                                                        </x-button>--}}
-{{--                                                    </div>--}}
-{{--                                                @endif--}}
-{{--                                            @endforeach--}}
-{{--                                        </div>--}}
-{{--                                    @endif--}}
+                                                        >
+                                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                                        </x-button>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    @endif
 
-{{--                                    <div class="mb-4">--}}
-{{--                                        <label class="block text-gray-700 text-sm font-bold mb-2"--}}
-{{--                                               for="images">Images</label>--}}
-{{--                                        <input--}}
-{{--                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"--}}
-{{--                                            type="file" id="images" name="images[]" multiple>--}}
-{{--                                    </div>--}}
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2"
+                                               for="images">Images</label>
+                                        <input
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                            type="file" id="images" name="images[]" multiple>
+                                    </div>
 
                                     <x-button action="submit" type="button" class="w-full m-0 font-bold">
                                         Save

@@ -68,7 +68,7 @@
                                         <td class="p-2 align-middle bg-transparent border-b shadow-transparent">
                                             <div class="flex px-2 py-1">
                                                 <div class="flex flex-col justify-center">
-                                                    <h6 class="mb-0 text-sm leading-normal">{{ $product->SKU }}</h6>
+                                                    <h6 class="mb-0 text-sm leading-normal">{{ $product->sku }}</h6>
                                                 </div>
                                             </div>
                                         </td>
