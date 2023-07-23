@@ -33,13 +33,23 @@
                                             <x-input-error :messages="$errors->get('categories')" class="mt-2" />
                                         </div>
                                     @endif
-                                    <div class="mb-4">
+                                    <div class="mb-4" style="position: relative">
+
                                         <label class="block text-gray-700 text-sm font-bold mb-2"
                                                for="SKU">SKU</label>
                                         <input
                                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-                                            type="text" id="sku" name="sku" placeholder="NS228JG" value="{{ old('sku') }}">
+                                            type="text" id="sku" name="sku" placeholder="NS228JG">
                                         <x-input-error :messages="$errors->get('sku')" class="mt-2" />
+
+                                        <x-button href="#"
+                                                  color-type="warning"
+                                                  class=" new-sku"
+                                                  style="position: absolute; bottom: 0; right: 0"
+                                                  data-route="{{ route('admin.ajax.sku.generate') }}"
+                                        >
+                                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                                        </x-button>
                                     </div>
                                     <div class="mb-4">
                                         <label class="block text-gray-700 text-sm font-bold mb-2"
@@ -89,7 +99,7 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <img src="#" id="thumbnail-preview">
+                                        <img src="#" id="thumbnail-preview" >
                                     </div>
 
                                     <div class="mb-4">

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Ajax\DeleteImageController;
+use App\Http\Controllers\Admin\Ajax\GenerateSkuController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductsController;
@@ -29,6 +31,11 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'role:admin|moderato
     Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::resource('products', ProductsController::class)->except(['show']);
     Route::resource('categories', CategoriesController::class)->except(['show']);
+
+    Route::name('ajax.')->middleware('auth')->prefix('ajax')->group(function() {
+            Route::delete('images/{image}', DeleteImageController::class)->name('images.delete');
+            Route::get('sku/generate', GenerateSkuController::class)->name('sku.generate');
+    });
 });
 
 Route::middleware('auth')->group(function () {

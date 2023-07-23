@@ -68,8 +68,12 @@ class ProductsService
 
     public function destroyProduct(Product $product)
     {
-        return $product->categories()->detach()
-            && $product->delete();
+        if($product->categories())
+        {
+            $product->categories()->detach();
+        }
+
+        return $product->delete();
     }
 
     private function formatRequestData($validated_data): array

@@ -114,7 +114,7 @@
                                                                   color-type="danger"
                                                                   class="py-1 px-2 remove-image"
                                                                   style="position: absolute; top: 0; right: 0"
-{{--                                                                  data-route="{{ route('ajax.images.delete', $image) }}"--}}
+                                                                  data-route="{{ route('admin.ajax.images.delete', $image) }}"
                                                         >
                                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                                         </x-button>
