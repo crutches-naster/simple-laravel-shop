@@ -71,4 +71,18 @@ class Product extends Model
             $this->attributes['slug'] ?? Str::of($this->attributes['title'])->slug('-')
         );
     }
+
+    public function endPrice(): Attribute
+    {
+        return Attribute::get(function() {
+            $price = $this->attributes['base_price'];
+            $discount = $this->attributes['discount'] ?? 0;
+
+            $endPrice =  $discount === 0
+                ? $price
+                : ($price - ($price * $discount / 100));
+
+            return $endPrice <= 0 ? 1 : round($endPrice, 2);
+        });
+    }
 }

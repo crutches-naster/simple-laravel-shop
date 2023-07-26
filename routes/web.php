@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\Ajax\GenerateSkuController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductsController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Shop\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,9 +21,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', HomeController::class)->name('home');
+
+Route::resource('categories', CategoryController::class)
+    ->only(['index', 'show'])
+    ->scoped(['category' => 'slug']);;
 
 Route::get('/dashboard', function () {
     return view('dashboard');

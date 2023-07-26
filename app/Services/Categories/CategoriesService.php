@@ -51,8 +51,8 @@ class CategoriesService
 
     public function destroy(Category $category)
     {
-        if ($category->childs()->exists()) {
-            $category->childs()->update(['parent_id' => null]);
+        if ($category->children()->exists()) {
+            $category->children()->update(['parent_id' => null]);
         }
 
         return $this->repo->destroy(
