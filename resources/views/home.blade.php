@@ -53,4 +53,6 @@
         </div>
     </section>
 
+    @vite(['resources/js/product-actions.js'])
+
 </x-app-layout>

@@ -1,3 +1,5 @@
+import './bootstrap';
+
 $(document).ready(() => {
     $(document).on('click', '.remove-image', function(e) {
         e.preventDefault()

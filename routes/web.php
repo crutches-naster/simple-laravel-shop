@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Shop\Ajax\AddProductToCartController;
+use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +27,23 @@ Route::get('/', HomeController::class)->name('home');
 
 Route::resource('categories', CategoryController::class)
     ->only(['index', 'show'])
-    ->scoped(['category' => 'slug']);;
+    ->scoped(['category' => 'slug']);
+
+Route::resource('products', \App\Http\Controllers\Shop\ProductsController::class)
+    ->only(['index', 'show'])
+    ->scoped(['product' => 'slug']);
+
+Route::name('cart.')->prefix('cart')->group(function() {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('{product}', [CartController::class, 'add'])->name('add');
+    Route::delete('/', [CartController::class, 'remove'])->name('remove');
+    Route::post('{product}/count', [CartController::class, 'countUpdate'])->name('count.update');
+
+    Route::name('ajax.')->middleware('auth')->prefix('ajax')->group(function() {
+        Route::post('product/add/{product}', AddProductToCartController::class)->name('product.add');
+    });
+
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -47,5 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
 
 require __DIR__.'/auth.php';
