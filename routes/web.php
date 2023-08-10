@@ -6,9 +6,12 @@ use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Orders\ThankYouPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Shop\Ajax\AddProductToCartController;
+use App\Http\Controllers\Shop\Ajax\Payments\PaypalController;
 use App\Http\Controllers\Shop\CartController;
+use App\Http\Controllers\Shop\CheckoutController;
 use App\Http\Controllers\Shop\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +67,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('checkout', CheckoutController::class)->name('checkout');
+    Route::prefix('paypal')->name('paypal.')->group(function() {
+        Route::post('order/create', [PaypalController::class, 'create'])->name('orders.create');
+        Route::post('order/{orderId}/capture', [PaypalController::class, 'capture'])->name('orders.capture');
+    });
+
+    Route::get('orders/{order}/paypal/thank-you', [ThankYouPageController::class, 'paypal'])->name('payment.thankyou');
+
+    Route::name('ajax.')->middleware('auth')->prefix('ajax')->group(function() {
+        Route::prefix('paypal')->name('paypal.')->group(function () {
+            Route::post('order/create', [PaypalController::class, 'create'])->name('orders.create');
+            Route::post('order/{orderId}/capture', [PaypalController::class, 'capture'])->name('orders.capture');
+        });
+    });
+
 });
 
 

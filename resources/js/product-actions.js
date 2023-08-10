@@ -6,15 +6,16 @@ $(document).ready(() => {
         const btn = $(this)
         const counter = $('#cart_counter')
 
-        console.log(btn)
-
         axios.post( btn.data('route')).then(function (response)
         {
             $('#cart_counter').text(
                 parseInt( counter.text() ) + 1
             )
 
-            // ToDo add toast about product successfully was added to cart
+            iziToast.success({
+                title: 'Successfully added to cart',
+                position: 'topRight',
+            })
         })
             .catch(function (error) {
                 // обработка ошибки

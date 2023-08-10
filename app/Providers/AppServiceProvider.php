@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\IRepoOrder;
+use App\Repositories\RepoOrder;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,4 +23,11 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+    public array $bindings = [
+//        ProductRepositoryContract::class => ProductRepository::class,
+//        ImageRepositoryContract::class => ImageRepository::class,
+//        IRepoOrder::class => RepoOrder::class,
+//        PaypalServiceContract::class => PaypalService::class,
+    ];
 }

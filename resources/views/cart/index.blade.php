@@ -80,12 +80,13 @@
                         <p class="text-sm text-gray-700">including Tax</p>
                     </div>
                 </div>
-                <button class="mt-6 w-full rounded-md  py-1.5 font-medium
-                    @if(Cart::instance('main_cart')->content()->count()) bg-blue-500 text-blue-50 hover:bg-blue-600
-                    @else bg-gray-500 text-gray-50 " disabled="disabled
-                    @endif ">
+                <x-button href="{{route('checkout')}}"
+                          class="mt-6 w-full rounded-md  py-1.5 font-medium
+                            @if(Cart::instance('main_cart')->content()->count()) bg-blue-500 text-blue-50 hover:bg-blue-600
+                            @else bg-gray-500 text-gray-50 " disabled="disabled
+                            @endif ">
                     Check out
-                </button>
+                </x-button>
             </div>
         </div>
     </div>
