@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\PaymentMethods;
 use App\Enums\TransactionStatuses;
+use App\Events\NewOrderCreatedEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Repositories\Contracts\IRepoOrder;
@@ -25,6 +26,8 @@ class RepoOrder implements IRepoOrder
         $order = auth()->user()->orders()->create($data);
 
         $this->addProductsToOrder($order);
+
+        NewOrderCreatedEvent::dispatch($order);
 
         return $order;
     }

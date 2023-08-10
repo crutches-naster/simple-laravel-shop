@@ -47,4 +47,9 @@ class OrderStatus extends Model
     {
         return $query->where('name', $enum->value);
     }
+
+    public function getName(): string
+    {
+        return $this->name->value;
+    }
 }

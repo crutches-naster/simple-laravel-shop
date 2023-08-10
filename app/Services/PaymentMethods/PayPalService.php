@@ -4,6 +4,7 @@ namespace App\Services\PaymentMethods;
 
 use App\Enums\PaymentMethods;
 use App\Enums\TransactionStatuses;
+use App\Events\NewOrderCreatedEvent;
 use App\Http\Requests\Orders\CreateOrderRequest;
 use App\Repositories\Contracts\IRepoOrder;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -28,7 +29,8 @@ class PayPalService
 
     public function create( CreateOrderRequest $request, IRepoOrder $repository)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
             $total = Cart::instance('main_cart')->total();
 
