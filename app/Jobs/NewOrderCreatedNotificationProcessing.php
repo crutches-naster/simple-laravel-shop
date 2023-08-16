@@ -43,6 +43,5 @@ class NewOrderCreatedNotificationProcessing implements ShouldQueue
             User::role('admin')->get(),
             new NewOrderCreatedAdminNotification($this->order)
         );
-
     }
 }

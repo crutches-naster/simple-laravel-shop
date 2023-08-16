@@ -36,6 +36,10 @@ Route::resource('products', \App\Http\Controllers\Shop\ProductsController::class
     ->only(['index', 'show'])
     ->scoped(['product' => 'slug']);
 
+Route::name('callbacks.')->prefix('callback')->middleware(['role:admin|moderator|customer'])->group(function () {
+    Route::get('telegram', \App\Http\Controllers\Callbacks\TelegramController::class)->name('telegram');
+});
+
 Route::name('cart.')->prefix('cart')->group(function() {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('{product}', [CartController::class, 'add'])->name('add');

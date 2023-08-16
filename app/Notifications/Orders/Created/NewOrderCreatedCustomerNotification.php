@@ -8,7 +8,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use NotificationChannels\Telegram\TelegramFile;
+use NotificationChannels\Telegram\TelegramMessage;
 
 class NewOrderCreatedCustomerNotification extends Notification
 {
@@ -19,10 +22,10 @@ class NewOrderCreatedCustomerNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(InvoicesService $i_Service)
+    public function __construct()
     {
         //
-        $this->invoicesService = $i_Service;
+        $this->invoicesService = new InvoicesService();
     }
 
     /**
@@ -32,7 +35,8 @@ class NewOrderCreatedCustomerNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        //return ['mail'];
+        return $notifiable?->user?->telegram_id ? ['mail', 'telegram'] : ['mail'];
     }
 
     /**
@@ -56,6 +60,25 @@ class NewOrderCreatedCustomerNotification extends Notification
                 'as' => $invoice->filename,
                 'mime' => 'application/pdf'
             ]);
+    }
+
+
+    public function toTelegram($notifiable)
+    {
+        $invoice = $this->invoicesService->generate($notifiable);
+
+        TelegramMessage::create()
+            ->to( $notifiable->user->telegram_id )
+            ->content("Hello, $notifiable->name $notifiable->surname")
+            ->line("Your invoice ready")
+            ->line("You can see the invoice file in attachments")
+            ->send();
+
+        return TelegramFile::create()
+            ->to( $notifiable->user->telegram_id )
+            ->content("Your order $invoice->filename invoice")
+            ->file( Storage::disk('public')->path($invoice->filename), 'document');
+
     }
 
     /**

@@ -13,8 +13,15 @@ use LaravelDaily\Invoices\Facades\Invoice as InvoiceBuilder;
 
 class InvoicesService
 {
-    public function generate(Order $order): Invoice
+    protected $invoice = null;
+
+    public function generate( Order $order ): Invoice
     {
+        if($this->invoice != null)
+        {
+            return $this->invoice;
+        }
+
         $fullName = "{$order->name} {$order->surname}";
         $orderSerial = $order->vendorOrderId ?? $order->id;
         $fileName = Str::of("{$fullName} {$orderSerial}")->slug('-');
@@ -29,7 +36,7 @@ class InvoicesService
             ]
         ]);
 
-        $invoice = InvoiceBuilder::make()
+        $this->invoice = InvoiceBuilder::make()
             ->serialNumberFormat($order->vendorOrderId ?? $order->id)
             ->status($order->status->getName())
             ->buyer($customer)
@@ -40,10 +47,10 @@ class InvoicesService
             ->save('public');
 
         if ( $order->status->getName() === OrderStatuses::InProcess->value) {
-            $invoice->payUntil(3);
+            //$this->invoice->payUntil(3);
         }
 
-        return $invoice;
+        return $this->invoice;
     }
 
     protected function getInvoiceItems(Collection $products): array
