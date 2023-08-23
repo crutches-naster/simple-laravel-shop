@@ -15,7 +15,7 @@ class HomeController extends Controller
         $categories = Category::take(6)->get();
         $products = Product::orderByDesc('id')->take(8)->get();
 
-        Cart::instance('main_cart')->restore(Auth::user()->email);
+        //Cart::instance('main_cart')->restore(Auth::user()->email);
 
         return view('home', compact('categories', 'products'));
     }

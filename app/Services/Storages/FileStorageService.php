@@ -19,13 +19,14 @@ class FileStorageService
 
         $filePath = "public/{$additionalPath}" . Str::random(8) . '_' . time() . '.' . $file->getClientOriginalExtension();
 
-        Storage::put($filePath, File::get($file), 'public');
+        Storage::disk('s3')->put($filePath, File::get($file));
+        Storage::setVisibility($filePath, 'public');
 
         return $filePath;
     }
 
     public static function remove(string $file): void
     {
-        Storage::delete($file);
+        Storage::disk('s3')->delete($file);
     }
 }

@@ -1,4 +1,4 @@
-import './bootstrap';
+// import './bootstrap';
 
 $(document).ready(() => {
     $(document).on('click', '.remove-image', function(e) {

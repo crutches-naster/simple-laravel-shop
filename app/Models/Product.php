@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
@@ -48,12 +49,22 @@ class Product extends Model implements Buyable
                     return 'https://via.placeholder.com/640x480.png/004466?text=no thumbnail';
                 }
 
-                if (!Storage::exists($this->attributes['thumbnail'])) {
-                    return $this->attributes['thumbnail'];
+                $key = "products.thumbnail.{$this->attributes['thumbnail']}";
+
+                if (Cache::has($key)) {
+                    return Cache::get($key);
                 }
 
-                // public/images/.....png
-                return Storage::url($this->attributes['thumbnail']);
+                $link = Storage::disk('s3')->temporaryUrl($this->attributes['thumbnail'], now()->addMinutes(10));
+                Cache::put($key, $link, 570);
+                return $link;
+
+//                if (!Storage::exists($this->attributes['thumbnail'])) {
+//                    return $this->attributes['thumbnail'];
+//                }
+//
+//                // public/images/.....png
+//                return Storage::url($this->attributes['thumbnail']);
             }
         );
 
