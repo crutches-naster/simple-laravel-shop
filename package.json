@@ -18,6 +18,8 @@
     "dependencies": {
         "flowbite": "^1.8.1",
         "jquery": "^3.7.0",
+        "laravel-echo": "^1.15.3",
+        "pusher-js": "^8.3.0",
         "sass": "^1.63.6",
         "scss": "^0.2.4",
         "sweetalert": "^2.1.2"

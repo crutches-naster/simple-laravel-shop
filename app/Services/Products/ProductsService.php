@@ -2,6 +2,7 @@
 
 namespace App\Services\Products;
 
+use App\Events\NewProductAddedEvent;
 use App\Http\Requests\Products\UpdateProductRequest;
 use App\Models\Product;
 use App\Repositories\RepoImages;
@@ -45,6 +46,8 @@ class ProductsService
                 $prepared_data['attributes']['slug']
             );
         }
+
+        NewProductAddedEvent::dispatch($product);
 
         return $product;
     }

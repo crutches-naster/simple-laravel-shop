@@ -34,3 +34,35 @@ import 'flowbite';
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+
+import Echo from 'laravel-echo'
+import Pusher from 'pusher-js';
+
+window.Pusher = Pusher;
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'eu',
+    forceTLS: false,
+});
+
+window.Echo.private(`my-channel`)
+    .listen('.App\\Events\\NewProductAddedEvent', (e) => {
+        iziToast.info({
+            title: e.product_title,
+            message: 'We have new product arrived!',
+            position: 'topCenter',
+            buttons: [
+                ['<button><b>View product</b></button>', function (instance, toast)  {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = e.product_url
+                }, true],
+                ['<button>Not interested</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ],
+        })
+    });
+
+
